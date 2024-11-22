@@ -81,6 +81,26 @@
             background-color: #e65c50;
         }
 
+        /* Custom styles for messages */
+        .message {
+            width: 100%;
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
         @media (max-width: 768px) {
             li {
                 width: 100%;
@@ -90,6 +110,16 @@
 </head>
 <body>
     <h1>Food Menu</h1>
+
+    <!-- Display messages -->
+    {% if messages %}
+    <div class="message {% for message in messages %}{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}{% endfor %}">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <ul>
         {% for item in menu_items %}
         <li>

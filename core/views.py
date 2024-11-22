@@ -370,19 +370,30 @@ def place_order_unregistered(request, item_id):
         customer_name = request.POST['customer_name']
         table_id = request.POST['table']
         quantity = int(request.POST['quantity'])
+        
+        
+        try:
+            table = Table.objects.get(id=table_id)
 
-        table = Table.objects.get(id=table_id)
-        table.is_booked = True
-        table.save()
+            # Create the order
+            UnregisteredOrder.objects.create(
+                customer_name=customer_name,
+                menu_item=item,
+                table=table,
+                quantity=quantity,
+            )
 
-        # Create an order for the unregistered user
-        UnregisteredOrder.objects.create(
-            menu_item=item,
-            quantity=quantity,
-            customer_name=customer_name,
-            table=table
-        )
-        return redirect('scan_menu')
+            # Mark table as booked
+            table.is_booked = True
+            table.save()
+
+            # Add a success message
+            messages.success(request, "Order placed successfully!")
+        except Exception as e:
+            # Add a failure message
+            messages.error(request, f"Failed to place order: {str(e)}")
+
+        return redirect("scan_menu")  # Redirect to scan-menu page
 
     return render(request, 'place_order_unregistered.html', {'item': item, 'tables': tables})
 
