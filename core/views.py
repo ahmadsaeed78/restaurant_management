@@ -131,7 +131,14 @@ def signup_view(request):
             user.set_password(form.cleaned_data['password'])  # Hash the password
             user.save()
             login(request, user)  # Log the user in after signup
-            return redirect('home')  # Redirect to a success page
+            if user.role == 'customer':
+                return render(request, 'customer_dashboard.html', {'user': user})  # Change this to your desired redirect
+            elif user.role == 'chief':
+                return redirect('chief_dashboard')  # Change this to your desired redirect
+            elif user.role == 'admin':
+                return redirect('admin_dashboard')  # Change this to your desired redirect
+            else:
+                return redirect('home')  # Change this to your desired redirect
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
