@@ -319,9 +319,14 @@ def change_status(request, order_id, new_status):
     if new_status not in ['delivered', 'completed', 'paid']:
         messages.error(request, "Invalid status change.")
         return redirect('manage_unregistered_orders')
-
+    
+    if new_status == 'paid':
+        table = order.table
+        table.is_booked = False
+        table.save()
     order.status = new_status
     order.save()
+   
 
     messages.success(request, f"Order status updated to {new_status.capitalize()}.")
     return redirect('manage_unregistered_orders')
