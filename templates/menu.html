@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu</title>
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'menu' %}">Menu</a></li>
+                <li><a href="{% url 'reservation' %}">Reservations</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <div class="menu">
+        <h1>Our Menu</h1>
+        <main>
+            <div class="menu-items">
+                {% for item in menu_items %}
+                    <div class="menu-item">
+                        <h2>{{ item.name }}</h2>
+                        {% if item.image %}
+                        <div class="menu-item-image-container">
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="menu-item-image">
+                        </div>
+                        {% endif %}
+                        <p>{{ item.description }}</p>
+                        <p class="price">${{ item.price }}</p>
+                        {% if item.available %}
+                            <a href="{% url 'place_order' item.id %}">Place Order</a>
+                        {% else %}
+                            <p>Not Available</p>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p>No menu items available.</p>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chief Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <style>
+        /* menu_management.css */
+        table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+img {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Chief Dashboard</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Manage Users</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <!-- manage_orders.html -->
+<table>
+    <tr>
+        <th>Order ID</th>
+        <th>User</th>
+        <th>Menu Item</th>
+        <th>Quantity</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.user.username }}</td>
+        <td>{{ order.menu_item.name }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>{{ order.status }}</td>
+        <td>
+            {% if order.status == 'ordered' %}
+                <a href="{% url 'update_order_status' order.id 'delivered' %}">Mark as Delivered</a>
+            {% elif order.status == 'delivered' %}
+                <a href="{% url 'update_order_status' order.id 'completed' %}">Mark as Completed</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+        </main>
+    </div>
+</body>
+</html>
+

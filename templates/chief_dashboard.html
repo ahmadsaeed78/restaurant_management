@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chief Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <style>
+        /* General button styling */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff; /* Primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline on links */
+            transition: background-color 0.3s ease;
+        }
+    
+        /* Hover effect */
+        .btn:hover {
+            background-color: #0056b3; /* Darker shade for hover */
+        }
+    
+        /* Disabled button */
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    
+        /* Different button colors */
+        .btn-primary {
+            background-color: #007bff;
+        }
+    
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+    
+        .btn-success {
+            background-color: #28a745;
+        }
+    
+        .btn-danger {
+            background-color: #dc3545;
+        }
+    
+        .btn-warning {
+            background-color: #ffc107;
+            color: #000;
+        }
+    
+        /* Size variations */
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+    
+        .btn-large {
+            padding: 15px 30px;
+            font-size: 18px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Chief Dashboard</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Manage Users</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="overview">
+                <h2>Overview</h2>
+                <p>Welcome to your dashboard! Here you can manage users and view reports.</p>
+            </section>
+            <a href="{% url 'menu_list' %}" class="btn btn-danger btn-large">Manage Menus</a>
+            <a href="{% url 'menu_group_list' %}" class="btn btn-danger btn-large">Manage Menu Groups</a>
+            <a href="{% url 'menu_management' %}" class="btn btn-danger btn-large">Manage Menu Items</a>
+            <a href="{% url 'manage_orders' %}" class="btn btn-danger btn-large">Manage Orders</a>
+            <a href="{% url 'manage_unregistered_orders' %}" class="btn btn-danger btn-large">Manage Unregistered Orders</a>
+            <!--
+            <a href="#" class="btn btn-primary">Primary Button</a>
+<a href="#" class="btn btn-success">Success Button</a>
+<a href="#" class="btn btn-danger btn-large">Large Danger Button</a>
+<button class="btn btn-warning btn-small">Small Warning Button</button>
+            -->
+        </main>
+    </div>
+</body>
+</html>
