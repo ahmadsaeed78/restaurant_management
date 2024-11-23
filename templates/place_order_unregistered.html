@@ -80,14 +80,7 @@
         {% csrf_token %}
         <label for="customer_name">Your Name:</label>
         <input type="text" name="customer_name" placeholder="Enter your name" required>
-
-        <label for="table">Select Table:</label>
-        <select name="table" required>
-            {% for table in tables %}
-            <option value="{{ table.id }}">Table {{ table.table_number }}</option>
-            {% endfor %}
-        </select>
-
+        <input type="hidden" name="table" value="{{ table_number }}">
         <label for="quantity">Quantity:</label>
         <input type="number" name="quantity" min="1" placeholder="Enter quantity" required>
 

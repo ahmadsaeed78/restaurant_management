@@ -57,10 +57,12 @@ urlpatterns = [
     path('chief/menu_group/delete/<int:menu_group_id>/', views.delete_menu_group, name='delete_menu_group'),
 
     path('scan-menu/', views.scan_menu, name='scan_menu'),
-    path('place-order-unregistered/<int:item_id>/', views.place_order_unregistered, name='place_order_unregistered'),
+    path('place-order-unregistered/<int:item_id>/<int:table_id>/', views.place_order_unregistered, name='place_order_unregistered'),
     path('chief/manage_unregistered_orders/', views.manage_unregistered_orders, name='manage_unregistered_orders'),
     path('chief/change-status/<int:order_id>/<str:new_status>/', change_status, name='change_status'),
 
+    path('chief/manage-tables/', views.manage_tables_chief, name='manage_tables_chief'),
+    path('chief/generate-table-qr/<int:table_id>/', views.generate_table_qr, name='generate_table_qr'),
 
     path('admin_page/manage-tables/', manage_tables, name='manage_tables'),
     path('admin_page/add-table/', add_table, name='add_table'),
