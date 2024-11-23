@@ -1,3 +1,4 @@
+from django.urls import reverse
 from rest_framework import viewsets
 from .models import Menu, MenuItem, Reservation, Order
 from .serializers import MenuSerializer, MenuItemSerializer, ReservationSerializer, OrderSerializer
@@ -358,13 +359,16 @@ def generate_bill(request, order_id):
 
 def scan_menu(request):
     menu_items = MenuItem.objects.filter(available=True)
-    return render(request, 'scan_menu.html', {'menu_items': menu_items})
+    table_number = request.GET.get('table_id')
+    table = get_object_or_404(Table, id=table_number)
+    return render(request, 'scan_menu.html', {'menu_items': menu_items, 'table': table})
 
 from .models import Table, UnregisteredOrder
 
-def place_order_unregistered(request, item_id):
+def place_order_unregistered(request, item_id, table_id):
     item = get_object_or_404(MenuItem, id=item_id)
     tables = Table.objects.filter(is_booked = False)
+    table_number = table_id
 
     if request.method == 'POST':
         customer_name = request.POST['customer_name']
@@ -393,11 +397,43 @@ def place_order_unregistered(request, item_id):
             # Add a failure message
             messages.error(request, f"Failed to place order: {str(e)}")
 
-        return redirect("scan_menu")  # Redirect to scan-menu page
+        return redirect(f"/scan-menu/?table_id={table_number}")  # Redirect to scan-menu page
 
-    return render(request, 'place_order_unregistered.html', {'item': item, 'tables': tables})
+    return render(request, 'place_order_unregistered.html', {'item': item, 'tables': tables, 'table_number': table_number})
 
 
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Table
+from django.http import JsonResponse
+import qrcode
+from io import BytesIO
+from django.core.files.base import ContentFile
+
+def manage_tables_chief(request):
+    tables = Table.objects.all()
+    return render(request, 'chief/manage_tables_chief.html', {'tables': tables})
+
+def generate_table_qr(request, table_id):
+    table = Table.objects.get(id=table_id)
+    url = request.build_absolute_uri(reverse('scan_menu') + f"?table_number={table.table_number}")
+    
+    # Generate QR code
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(url)
+    qr.make(fit=True)
+
+    # Create an image of the QR code
+    img = qr.make_image(fill_color="black", back_color="white")
+    response = HttpResponse(content_type="image/png")
+    img.save(response, "PNG")
+    return response
 
 
 
